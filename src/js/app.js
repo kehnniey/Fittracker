@@ -12,7 +12,7 @@
  */
 
 // Import API modules
-import { fetchExercises, searchExercises as filterExercises } from './api/wger.mjs';
+import { fetchExercises, searchExercises as filterExercises } from './api/exercisedb.mjs';
 import { searchFood as searchUSDA, isConfigured as isUSDAConfigured, getSampleFoods } from './api/usda.mjs';
 
 // Import storage functions
@@ -102,22 +102,40 @@ function displayExercises(exercisesToShow) {
     
     // Generate HTML for each exercise
     exerciseList.innerHTML = exercisesToShow.map(exercise => `
-        <div class="exercise-item">
+        <div class="exercise-item" data-exercise-id="${exercise.id}">
             <div class="exercise-info">
                 <h3>${exercise.name}</h3>
                 <div class="exercise-meta">
                     ${exercise.category} • ${exercise.equipment} • ${exercise.type}
                 </div>
             </div>
-            <button class="btn btn-small" data-exercise-id="${exercise.id}">
-                + Add
-            </button>
+            <div class="exercise-actions">
+                <button class="btn btn-small btn-log" data-exercise-id="${exercise.id}" data-exercise-name="${escapeHtml(exercise.name)}" title="Log workout">
+                    📝 Log
+                </button>
+                <button class="btn btn-small btn-add" data-exercise-id="${exercise.id}" title="Add to routine">
+                    + Add
+                </button>
+            </div>
         </div>
     `).join('');
     
-    // Add event listeners to all "Add" buttons
-    exerciseList.querySelectorAll('.btn-small').forEach(button => {
-        button.addEventListener('click', handleAddExercise);
+    // Add event listeners to Log buttons
+    exerciseList.querySelectorAll('.btn-log').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent triggering parent click
+            const exerciseId = parseInt(button.getAttribute('data-exercise-id'));
+            const exerciseName = button.getAttribute('data-exercise-name');
+            openWorkoutModalWithExercise(exerciseName);
+        });
+    });
+    
+    // Add event listeners to Add buttons
+    exerciseList.querySelectorAll('.btn-add').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent triggering parent click
+            handleAddExercise(e);
+        });
     });
 }
 
@@ -338,6 +356,25 @@ function openWorkoutModal() {
     const modal = document.getElementById('workoutModal');
     if (modal) {
         modal.classList.add('active');
+    }
+}
+
+/**
+ * Open workout modal with pre-filled exercise name
+ * @param {string} exerciseName - Name of the exercise to log
+ */
+function openWorkoutModalWithExercise(exerciseName) {
+    const modal = document.getElementById('workoutModal');
+    const nameInput = document.getElementById('workoutName');
+    
+    if (modal && nameInput) {
+        nameInput.value = exerciseName;
+        modal.classList.add('active');
+        
+        // Focus on duration field since name is already filled
+        setTimeout(() => {
+            document.getElementById('workoutDuration')?.focus();
+        }, 100);
     }
 }
 
