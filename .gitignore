@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .DS_Store
 .cache
 .vscode
@@ -5,4 +6,13 @@ web_modules
 node_modules
 dist
 .env
+=======
+.DS_Store
+.cache
+.vscode
+web_modules
+node_modules
+dist
+.env
+>>>>>>> 2b44e6bb17f00a1671848176eacf260111a90550
 .idea

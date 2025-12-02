@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 Trello Board: https://trello.com/b/77NPiQvv/sleep-outside-team-07
 Members: Celestine Ahfua, Ederson Villalba, Rafael Parra
+=======
+Trello Board: https://trello.com/b/77NPiQvv/sleep-outside-team-07
+Members: Celestine Ahfua, Ederson Villalba, Rafael Parra
+>>>>>>> 2b44e6bb17f00a1671848176eacf260111a90550
