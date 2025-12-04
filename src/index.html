@@ -19,6 +19,7 @@
             <nav class="nav">
                 <a href="#dashboard" class="nav-link">Dashboard</a>
                 <a href="#exercises" class="nav-link">Exercises</a>
+                <a href="#routines" class="nav-link">Routines</a>
                 <a href="#nutrition" class="nav-link">Nutrition</a>
                 <a href="#progress" class="nav-link">Progress</a>
             </nav>
@@ -141,6 +142,37 @@
                 <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
                 <p><strong>Charts Coming Soon!</strong></p>
                 <p style="font-size: 0.9rem; margin-top: 0.5rem;">Progress charts and visualizations will be added in Week 7</p>
+            </div>
+        </section>
+
+        <!-- MY ROUTINES SECTION -->
+        <section id="routines" class="card" style="margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <h2 style="margin-bottom: 0.5rem;">My Routines</h2>
+                    <p style="color: #666; font-size: 0.9rem;">Create and manage your custom workout routines</p>
+                </div>
+                <button class="btn" id="createRoutineBtn">+ Create Routine</button>
+            </div>
+            
+            <div id="routinesList" class="routines-grid">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <p>No routines yet. Create your first routine!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WORKOUT HISTORY SECTION -->
+        <section id="history" class="card" style="margin-top: 2rem;">
+            <h2>Workout History</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">View your past workouts</p>
+            
+            <div id="workoutHistory">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📅</div>
+                    <p>No workout history yet. Start logging workouts!</p>
+                </div>
             </div>
         </section>
 

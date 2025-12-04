@@ -730,6 +730,140 @@ textarea:focus {
 }
 
 /* ===================
+   ROUTINES SECTION
+   =================== */
+.routines-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.routine-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.routine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(42, 157, 143, 0.2);
+    border-color: #2A9D8F;
+}
+
+.routine-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.routine-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    color: #264653;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.routine-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.routine-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+}
+
+.routine-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.routine-stat-icon {
+    font-size: 1.2rem;
+}
+
+.routine-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.routine-action-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+    font-size: 1.2rem;
+}
+
+.routine-action-btn:hover {
+    background: #2A9D8F;
+    color: white;
+}
+
+/* ===================
+   WORKOUT HISTORY
+   =================== */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-item {
+    background: #f8f9fa;
+    border-left: 4px solid #2A9D8F;
+    padding: 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.history-date {
+    font-weight: 600;
+    color: #2A9D8F;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.history-workout-name {
+    font-size: 1.1rem;
+    color: #264653;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.history-details {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.history-time {
+    color: #999;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+/* ===================
    RESPONSIVE DESIGN
    =================== */
 @media (max-width: 768px) {

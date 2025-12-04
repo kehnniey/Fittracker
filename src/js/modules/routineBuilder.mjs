@@ -1,24 +1,21 @@
 /**
  * ROUTINE BUILDER MODULE
- * 
- * Manages workout routine creation and management
- * Allows users to create custom workout routines with multiple exercises
+ *
+ * Handles creation, editing, saving, and summary statistics
+ * for custom workout routines.
  */
 
 import { saveRoutines, loadRoutines, deleteRoutine } from './storage.mjs';
 
-// Current routine being built
-let currentRoutine = {
-    name: '',
-    description: '',
-    exercises: []
-};
+// Current routine being built/edited
+let currentRoutine = createEmptyRoutine();
 
 /**
- * Initialize routine builder
+ * Create a new blank routine structure
  */
-export function initRoutineBuilder() {
-    currentRoutine = {
+function createEmptyRoutine() {
+    return {
+        id: null,
         name: '',
         description: '',
         exercises: []
@@ -26,202 +23,48 @@ export function initRoutineBuilder() {
 }
 
 /**
- * Add exercise to current routine
- * 
- * @param {Object} exercise - Exercise object with id, name, category, equipment
- * @param {Object} details - Exercise details (sets, reps, duration)
+ * Generate a reasonably unique ID
+ */
+function generateId() {
+    return `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
+}
+
+/**
+ * Reset routine builder to a fresh routine
+ */
+export function initRoutineBuilder() {
+    currentRoutine = createEmptyRoutine();
+}
+
+/**
+ * Add an exercise to the current routine
+ *
+ * @param {Object} exercise  Exercise object (id, name, category, equipment)
+ * @param {Object} details   Sets/reps/duration/notes overrides
  */
 export function addExerciseToRoutine(exercise, details = {}) {
+    if (!exercise) return null;
+
     const routineExercise = {
-        id: Date.now(),
-        exerciseId: exercise.id,
-        name: exercise.name,
-        category: exercise.category,
-        equipment: exercise.equipment,
-        sets: details.sets || 3,
-        reps: details.reps || 10,
-        duration: details.duration || 0,
+        id: generateId(),
+        exerciseId: exercise.id || null,
+        name: exercise.name || 'Unnamed Exercise',
+        category: exercise.category || 'General',
+        equipment: exercise.equipment || 'None',
+        sets: Number(details.sets) || 3,
+        reps: Number(details.reps) || 10,
+        duration: Number(details.duration) || 0,
         notes: details.notes || ''
     };
-    
+
     currentRoutine.exercises.push(routineExercise);
-    
     return routineExercise;
 }
 
 /**
- * Remove exercise from current routine
- * 
- * @param {number} exerciseId - ID of exercise to remove
+ * Remove an exercise from the current routine
+ *
+ * @param {string|number} exerciseId - Internal exercise ID
  */
 export function removeExerciseFromRoutine(exerciseId) {
-    currentRoutine.exercises = currentRoutine.exercises.filter(
-        ex => ex.id !== exerciseId
-    );
-}
-
-/**
- * Update exercise details in routine
- * 
- * @param {number} exerciseId - ID of exercise to update
- * @param {Object} updates - Updated details
- */
-export function updateRoutineExercise(exerciseId, updates) {
-    const exercise = currentRoutine.exercises.find(ex => ex.id === exerciseId);
-    if (exercise) {
-        Object.assign(exercise, updates);
-    }
-}
-
-/**
- * Get current routine
- * 
- * @returns {Object} Current routine being built
- */
-export function getCurrentRoutine() {
-    return { ...currentRoutine };
-}
-
-/**
- * Set routine name and description
- * 
- * @param {string} name - Routine name
- * @param {string} description - Routine description
- */
-export function setRoutineInfo(name, description) {
-    currentRoutine.name = name;
-    currentRoutine.description = description;
-}
-
-/**
- * Save current routine
- * 
- * @returns {boolean} Success status
- */
-export function saveCurrentRoutine() {
-    if (!currentRoutine.name || currentRoutine.name.trim() === '') {
-        return false;
-    }
-    
-    if (currentRoutine.exercises.length === 0) {
-        return false;
-    }
-    
-    const routine = {
-        id: Date.now(),
-        name: currentRoutine.name.trim(),
-        description: currentRoutine.description.trim(),
-        exercises: currentRoutine.exercises,
-        createdAt: new Date().toISOString()
-    };
-    
-    const routines = loadRoutines();
-    routines.push(routine);
-    saveRoutines(routines);
-    
-    // Reset current routine
-    initRoutineBuilder();
-    
-    return true;
-}
-
-/**
- * Load a saved routine for editing
- * 
- * @param {number} routineId - ID of routine to load
- * @returns {Object|null} Loaded routine or null
- */
-export function loadRoutineForEditing(routineId) {
-    const routines = loadRoutines();
-    const routine = routines.find(r => r.id === routineId);
-    
-    if (routine) {
-        currentRoutine = {
-            id: routine.id,
-            name: routine.name,
-            description: routine.description,
-            exercises: [...routine.exercises]
-        };
-        return getCurrentRoutine();
-    }
-    
-    return null;
-}
-
-/**
- * Delete a saved routine
- * 
- * @param {number} routineId - ID of routine to delete
- * @returns {boolean} Success status
- */
-export function removeRoutine(routineId) {
-    return deleteRoutine(routineId);
-}
-
-/**
- * Get all saved routines
- * 
- * @returns {Array} Array of saved routines
- */
-export function getAllRoutines() {
-    return loadRoutines();
-}
-
-/**
- * Reorder exercises in current routine
- * 
- * @param {number} fromIndex - Current index
- * @param {number} toIndex - Target index
- */
-export function reorderExercises(fromIndex, toIndex) {
-    const exercises = currentRoutine.exercises;
-    const [movedExercise] = exercises.splice(fromIndex, 1);
-    exercises.splice(toIndex, 0, movedExercise);
-}
-
-/**
- * Duplicate an exercise in the routine
- * 
- * @param {number} exerciseId - ID of exercise to duplicate
- */
-export function duplicateExercise(exerciseId) {
-    const exercise = currentRoutine.exercises.find(ex => ex.id === exerciseId);
-    if (exercise) {
-        const duplicate = {
-            ...exercise,
-            id: Date.now()
-        };
-        currentRoutine.exercises.push(duplicate);
-        return duplicate;
-    }
-    return null;
-}
-
-/**
- * Get routine summary statistics
- * 
- * @param {Object} routine - Routine object
- * @returns {Object} Summary stats
- */
-export function getRoutineSummary(routine) {
-    const totalExercises = routine.exercises.length;
-    const totalSets = routine.exercises.reduce((sum, ex) => sum + (ex.sets || 0), 0);
-    const estimatedDuration = routine.exercises.reduce((sum, ex) => {
-        // Estimate 2-3 minutes per set
-        const setTime = (ex.sets || 3) * 2.5;
-        return sum + setTime + (ex.duration || 0);
-    }, 0);
-    
-    // Count exercises by category
-    const categories = {};
-    routine.exercises.forEach(ex => {
-        categories[ex.category] = (categories[ex.category] || 0) + 1;
-    });
-    
-    return {
-        totalExercises,
-        totalSets,
-        estimatedDuration: Math.round(estimatedDuration),
-        categories
-    };
-}
+    currentRoutine.exercises = currentRoutine.exercises.fi
