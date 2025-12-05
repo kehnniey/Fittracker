@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitTracker - Workout & Fitness Dashboard</title>
+    <meta name="description" content="Progress Tracker">
+    <meta name="author" content="Kehinde Ojo">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -11,7 +13,7 @@
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="images/favicon.png">
-    <link rel="manifest" href="manifest.json">
+  
 
 </head>
 <body>
@@ -174,6 +176,7 @@
                 <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
                 <p><strong>Charts Coming Soon!</strong></p>
                 <p style="font-size: 0.9rem; margin-top: 0.5rem;">Progress charts and visualizations will be added in Week 7</p>
+                <canvas id="progressChart" style="display:none; width:100%; height:200px;"></canvas>
             </div>
         </section>
 
@@ -366,7 +369,39 @@
 
     <!-- JAVASCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Test chart file -->
+<script type="module">
+    import { loadTestProgressChart } from "./src/js/test/progressTest.mjs";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadTestProgressChart();
+    });
+</script>
     <script type="module" src="js/app.js" defer></script>
+    <script>
+localStorage.setItem("fit_routines", JSON.stringify([
+    {
+        id: "r1",
+        name: "Full Body Strength",
+        exercises: [
+            { name: "Squats", sets: 4, reps: 10 },
+            { name: "Bench Press", sets: 3, reps: 8 },
+            { name: "Deadlift", sets: 3, reps: 5 }
+        ]
+    },
+    {
+        id: "r2",
+        name: "Cardio Burn",
+        exercises: [
+            { name: "Running", duration: 20 },
+            { name: "Jump Rope", duration: 10 }
+        ]
+    }
+]));
+
+console.log("✔ Fake routines loaded.");
+</script>
+
 
 </body>
 </html>

@@ -31,7 +31,6 @@ function createWorkoutChart() {
 
     const ctx = canvas.getContext('2d');
 
-    // Destroy existing chart
     if (workoutChart) workoutChart.destroy();
 
     workoutChart = new Chart(ctx, {
@@ -50,17 +49,10 @@ function createWorkoutChart() {
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            plugins: {
-                legend: { display: false }
-            },
+            plugins: { legend: { display: false } },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { stepSize: 1, color: '#666' }
-                },
-                x: {
-                    ticks: { color: '#666' }
-                }
+                y: { beginAtZero: true, ticks: { stepSize: 1, color: '#666' }},
+                x: { ticks: { color: '#666' }}
             }
         }
     });
@@ -81,16 +73,12 @@ function updateWorkoutChart() {
         date.setDate(date.getDate() - i);
         const dateStr = date.toISOString().split('T')[0];
 
-        // Label
         days.push(
-            i === 0
-                ? 'Today'
-                : i === 1
-                ? 'Yesterday'
-                : date.toLocaleDateString('en-US', { weekday: 'short' })
+            i === 0 ? 'Today' :
+            i === 1 ? 'Yesterday' :
+            date.toLocaleDateString('en-US', { weekday: 'short' })
         );
 
-        // Count
         counts.push(workouts.filter(w => w.date === dateStr).length);
     }
 
@@ -129,7 +117,7 @@ function createCalorieChart() {
                     label: 'Goal',
                     data: [],
                     borderColor: '#264653',
-                    borderDash: [5, 5],
+                    borderDash: [5,5],
                     fill: false
                 }
             ]
@@ -159,11 +147,9 @@ function updateCalorieChart() {
         const dateStr = date.toISOString().split('T')[0];
 
         days.push(
-            i === 0
-                ? 'Today'
-                : i === 1
-                ? 'Yesterday'
-                : date.toLocaleDateString('en-US', { weekday: 'short' })
+            i === 0 ? 'Today' :
+            i === 1 ? 'Yesterday' :
+            date.toLocaleDateString('en-US', { weekday: 'short' })
         );
 
         const dayMeals = meals.filter(m => m.date === dateStr);
@@ -188,3 +174,45 @@ export function destroyCharts() {
         calorieChart = null;
     }
 }
+
+/* ============================================================
+   TEST PROGRESS CHART (Does NOT break dashboard)
+============================================================ */
+
+function loadTestProgressChart() {
+    const placeholder = document.getElementById("chartPlaceholder");
+    const canvas = document.getElementById("progressChart");
+
+    // Only run if this special test section exists
+    if (!canvas || !placeholder) return;
+
+    canvas.style.display = "block";
+    placeholder.style.display = "none";
+
+    const ctx = canvas.getContext("2d");
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],
+            datasets: [{
+                label: "Workout Minutes",
+                data: [40, 55, 50, 70, 90],
+                borderWidth: 3,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true },
+                tooltip: { enabled: true }
+            },
+            scales: { y: { beginAtZero: true }}
+        }
+    });
+}
+
+// Run test chart ONLY if available
+document.addEventListener("DOMContentLoaded", loadTestProgressChart);

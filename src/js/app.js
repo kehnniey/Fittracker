@@ -631,4 +631,18 @@ if (document.readyState === 'loading') {
 } else {
     // DOM is already loaded
     initApp();
+    
+const placeholder = document.querySelector('#progressCard img');
+const chartCanvas = document.getElementById('progressChart');
+
+if (chartCanvas) {
+    chartCanvas.style.display = 'block';   // show the chart
+    if (placeholder) placeholder.style.display = 'none'; // hide placeholder
+    renderProgressChart();                  // your chart function
 }
+
+    
+}
+
+
+
