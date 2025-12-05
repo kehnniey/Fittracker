@@ -10,13 +10,42 @@
     
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="images/favicon.png">
+    <link rel="manifest" href="manifest.json">
+
 </head>
+<body>
+    <!-- HEADER -->
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FitTracker - Workout & Fitness Dashboard</title>
+
+    <!-- SEO -->
+    <meta name="description" content="FitTracker – Your personal fitness dashboard for workouts, exercise library, routines, nutrition tracking, and progress monitoring.">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- <link rel="icon" type="image/x-icon" href="images/favicon.ico"> -->
+    <!-- <link rel="shortcut icon" href="images/favicon.ico"> -->
+
+</head>
+
 <body>
     <!-- HEADER -->
     <header class="header">
         <div class="header-content">
             <div class="logo">🏋️ FitTracker</div>
-            <nav class="nav">
+
+            <nav class="nav" aria-label="Main Navigation">
                 <a href="#dashboard" class="nav-link">Dashboard</a>
                 <a href="#exercises" class="nav-link">Exercises</a>
                 <a href="#routines" class="nav-link">Routines</a>
@@ -25,6 +54,9 @@
             </nav>
         </div>
     </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="container">
 
     <!-- MAIN CONTAINER -->
     <div class="container">
@@ -333,6 +365,8 @@
     </div>
 
     <!-- JAVASCRIPT -->
-    <script type="module" src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="js/app.js" defer></script>
+
 </body>
 </html>
