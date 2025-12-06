@@ -4,34 +4,265 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitTracker - Workout & Fitness Dashboard</title>
-    
+    <meta name="description" content="Progress Tracker">
+    <meta name="author" content="Kehinde Ojo">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    
+
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="images/favicon.png">
+
+    <!-- Hamburger Menu & Food Modal Styles -->
+    <style>
+        /* ==========================================
+           HAMBURGER MENU STYLES
+           ========================================== */
+        
+        /* Hamburger icon (#menu div) */
+        #menu {
+            display: none;
+            width: 30px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        #menu::before,
+        #menu::after,
+        #menu span {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background-color: #ffffff;  /* White lines on teal header */
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            left: 0;
+        }
+
+        #menu::before {
+            top: 0;
+        }
+
+        #menu span {
+            display: block;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #menu::after {
+            bottom: 0;
+        }
+
+        /* Hamburger animation when menu is open */
+        #menu.active::before {
+            transform: rotate(45deg);
+            top: 50%;
+            margin-top: -1.5px;
+        }
+
+        #menu.active span {
+            opacity: 0;
+        }
+
+        #menu.active::after {
+            transform: rotate(-45deg);
+            bottom: 50%;
+            margin-bottom: -1.5px;
+        }
+
+        /* Mobile Navigation Styles */
+        @media (max-width: 768px) {
+            #menu {
+                display: block;
+            }
+
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                background: #2A6A72;  /* Teal background matching header */
+                flex-direction: column;
+                padding: 80px 2rem 2rem 2rem;
+                box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+                transition: right 0.3s ease;
+                z-index: 1000;
+                gap: 1rem;
+                list-style: none;
+                margin: 0;
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav li {
+                width: 100%;
+            }
+
+            .nav a {
+                display: block;
+                padding: 1rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);  /* Subtle white border */
+                font-size: 1.1rem;
+                width: 100%;
+                color: #ffffff;  /* White text */
+                text-decoration: none;
+            }
+
+            .nav a:hover {
+                background: rgba(255, 255, 255, 0.15);  /* Light white overlay on hover */
+                border-radius: 8px;
+            }
+
+            .nav a:active {
+                background: rgba(255, 255, 255, 0.25);  /* Stronger highlight when clicked */
+            }
+
+            /* Overlay when menu is open */
+            .nav-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.6);  /* Darker overlay */
+                z-index: 999;
+                transition: opacity 0.3s ease;
+            }
+
+            .nav-overlay.active {
+                display: block;
+            }
+
+            /* Adjust header for mobile */
+            .header-content {
+                justify-content: space-between;
+            }
+        }
+
+        /* ==========================================
+           FOOD MODAL STYLES
+           ========================================== */
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .food-result-item {
+            background: white;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 2px solid #E0E0E0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .food-result-item:hover {
+            border-color: #2A9D8F;
+            box-shadow: 0 4px 12px rgba(42, 157, 143, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .food-result-item.selected {
+            border-color: #2A9D8F;
+            background: #f0fdf4;
+        }
+
+        .food-item-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #264653;
+            margin-bottom: 0.5rem;
+        }
+
+        .food-item-nutrition {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+        }
+
+        .nutrition-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nutrition-badge.calories {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .nutrition-badge.protein {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .nutrition-badge.carbs {
+            background: #f3e5f5;
+            color: #6a1b9a;
+        }
+
+        .nutrition-badge.fat {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .food-item-brand {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+    </style>
+
 </head>
 <body>
     <!-- HEADER -->
     <header class="header">
         <div class="header-content">
             <div class="logo">🏋️ FitTracker</div>
-            <nav class="nav">
-                <a href="#dashboard" class="nav-link">Dashboard</a>
-                <a href="#exercises" class="nav-link">Exercises</a>
-                <a href="#nutrition" class="nav-link">Nutrition</a>
-                <a href="#progress" class="nav-link">Progress</a>
+
+            <nav>
+                <!-- Hamburger Menu (the #menu div) -->
+                <div id="menu"></div>
+                
+                <!-- Navigation Links -->
+                <ul class="nav" id="nav-list">
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#exercises">Exercises</a></li>
+                    <li><a href="#nutrition">Nutrition</a></li>
+                    <li><a href="#progress">Progress</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
+    <!-- Navigation Overlay (for mobile) -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
     <!-- MAIN CONTAINER -->
-    <div class="container">
-        
+    <main class="container">
+
         <!-- DASHBOARD SECTION -->
         <section id="dashboard">
             <div class="dashboard-grid">
-                
+
                 <!-- Today's Workout Card -->
                 <div class="card">
                     <h2>Today's Workout</h2>
@@ -76,6 +307,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
@@ -121,7 +353,7 @@
         <section id="progress" class="card" style="margin-top: 2rem;">
             <h2>Progress Tracking</h2>
             <p style="color: #666; margin-bottom: 1.5rem;">Track your fitness journey over time.</p>
-            
+
             <div class="stats-grid" style="margin-bottom: 2rem;">
                 <div class="stat-card">
                     <div class="stat-value" id="totalWorkouts">0</div>
@@ -137,94 +369,135 @@
                 </div>
             </div>
 
-            <div style="background: #f8f9fa; padding: 3rem; border-radius: 8px; text-align: center; color: #666; border: 2px dashed #2A9D8F;">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
-                <p><strong>Charts Coming Soon!</strong></p>
-                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Progress charts and visualizations will be added in Week 7</p>
+            <!-- WORKOUT CHART -->
+            <div id="workoutChartContainer" style="background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center; color: #666; border: 2px dashed #2A9D8F; margin-bottom: 2rem;">
+                <div id="workoutChartPlaceholder">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🏋️‍♂️</div>
+                    <p><strong>Workout Chart Coming Soon!</strong></p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Your weekly workouts will appear here.</p>
+                </div>
+                <canvas id="workoutChart" style="display:none; width:100%; height:200px;"></canvas>
             </div>
+
+            <!-- CALORIE CHART -->
+            <div id="calorieChartContainer" style="background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center; color: #666; border: 2px dashed #E9C46A; margin-bottom: 2rem;">
+                <div id="calorieChartPlaceholder">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🍎</div>
+                    <p><strong>Calorie Chart Coming Soon!</strong></p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Track your calorie intake over the week.</p>
+                </div>
+                <canvas id="calorieChart" style="display:none; width:100%; height:200px;"></canvas>
+            </div>
+
+            <!-- TEST PROGRESS CHART -->
+            <div id="progressChartContainer" style="background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center; color: #666; border: 2px dashed #264653;">
+                <div id="chartPlaceholder">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                    <p><strong>Progress Chart Coming Soon!</strong></p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Weekly progress visualizations will appear here.</p>
+                </div>
+                <canvas id="progressChart" style="display:none; width:100%; height:200px;"></canvas>
+            </div>
+
         </section>
+        
+    </main>
 
-        <!-- MEALS SECTION (Hidden by default) -->
-        <section id="meals" class="card" style="margin-top: 2rem; display: none;">
-            <h2>Today's Meals</h2>
-            <div id="mealList"></div>
-        </section>
-    </div>
+    <!-- ====================================
+         FOOD SEARCH MODAL
+         ==================================== -->
 
-    <!-- ADD FOOD MODAL -->
-    <div id="foodModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Add Food</h2>
-                <button class="close-btn" aria-label="Close">&times;</button>
-            </div>
+    <!-- Food Search Modal -->
+    <div id="foodSearchModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <button class="modal-close" onclick="closeFoodSearchModal()">&times;</button>
             
-            <div class="form-group">
-                <label>Search Food (USDA FoodData Central)</label>
-                <input 
-                    type="text" 
-                    id="foodSearchInput" 
-                    placeholder="e.g., chicken breast, apple..."
-                >
-            </div>
-            <div id="foodSearchResults" style="max-height: 200px; overflow-y: auto; margin-bottom: 1rem;"></div>
+            <h2 style="margin-bottom: 1.5rem; color: #2A9D8F;">🍽️ Add Food</h2>
             
-            <div style="border-top: 2px solid #e0e0e0; padding-top: 1rem; margin-top: 1rem;">
-                <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Or enter manually:</p>
-                <form id="addFoodForm">
-                    <div class="form-group">
-                        <label>Food Name</label>
-                        <input type="text" id="foodName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Calories</label>
-                        <input type="number" id="foodCalories" required min="0">
-                    </div>
-                    <div class="form-group">
-                        <label>Meal Type</label>
-                        <select id="mealType">
-                            <option value="breakfast">Breakfast</option>
-                            <option value="lunch">Lunch</option>
-                            <option value="dinner">Dinner</option>
-                            <option value="snack">Snack</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-full">Add Food</button>
-                </form>
+            <!-- Search Section -->
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <input 
+                        type="text" 
+                        id="foodSearchInput" 
+                        placeholder="Search for foods (e.g., chicken breast, apple, pizza)..."
+                        style="flex: 1; padding: 1rem; font-size: 1rem; border: 2px solid #E0E0E0; border-radius: 8px;"
+                    >
+                    <button 
+                        onclick="searchFoodAPI()" 
+                        class="btn"
+                        style="padding: 1rem 2rem; white-space: nowrap;">
+                        🔍 Search
+                    </button>
+                </div>
+                <p style="font-size: 0.85rem; color: #666;">
+                    Powered by USDA FoodData Central - 300,000+ foods available
+                </p>
             </div>
-        </div>
-    </div>
 
-    <!-- ADD WORKOUT MODAL -->
-    <div id="workoutModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Log Workout</h2>
-                <button class="close-btn" aria-label="Close">&times;</button>
+            <!-- Loading State -->
+            <div id="foodSearchLoading" style="display: none; text-align: center; padding: 3rem;">
+                <div style="
+                    width: 60px;
+                    height: 60px;
+                    border: 4px solid #f3f3f3;
+                    border-top: 4px solid #2A9D8F;
+                    border-radius: 50%;
+                    margin: 0 auto 1rem;
+                    animation: spin 1s linear infinite;
+                "></div>
+                <p style="color: #666; font-size: 1.1rem;">Searching USDA database...</p>
             </div>
-            <form id="addWorkoutForm">
-                <div class="form-group">
-                    <label>Exercise Name</label>
-                    <input type="text" id="workoutName" required>
+
+            <!-- Search Results -->
+            <div id="foodSearchResults" style="max-height: 400px; overflow-y: auto;">
+                <div id="foodResultsContent">
+                    <!-- Initial state -->
+                    <div style="text-align: center; padding: 3rem; color: #999;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                        <p>Search for a food to see nutrition information</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Duration (minutes)</label>
-                    <input type="number" id="workoutDuration" required min="1">
+            </div>
+
+            <!-- Selected Food Details (shows after selecting) -->
+            <div id="selectedFoodDetails" style="display: none; margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2A9D8F;">
+                <h3 style="margin-bottom: 1rem; color: #264653;">Selected Food</h3>
+                <div id="selectedFoodInfo"></div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Meal Type:</label>
+                    <select id="selectedMealType" style="width: 100%; padding: 0.75rem; border: 2px solid #E0E0E0; border-radius: 8px; font-size: 1rem;">
+                        <option value="Breakfast">🌅 Breakfast</option>
+                        <option value="Lunch">☀️ Lunch</option>
+                        <option value="Dinner">🌙 Dinner</option>
+                        <option value="Snack">🍪 Snack</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label>Sets</label>
-                    <input type="number" id="workoutSets" min="1" value="3">
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button onclick="cancelFoodSelection()" class="btn btn-secondary" style="flex: 1;">
+                        Cancel
+                    </button>
+                    <button onclick="confirmAddFood()" class="btn btn-primary" style="flex: 1; background: #2A9D8F;">
+                        ✅ Add to Today's Meals
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label>Reps</label>
-                    <input type="number" id="workoutReps" min="1" value="10">
-                </div>
-                <button type="submit" class="btn btn-full">Log Workout</button>
-            </form>
+            </div>
         </div>
     </div>
 
     <!-- JAVASCRIPT -->
-    <script type="module" src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="js/app.js" defer></script>
+    <script type="module" src="/js/test/progressTest.mjs"></script>
+
+   <footer>
+        <p>&copy; <span id="current-year"></span> FitTracker|Kehinde O. Ojo. All rights reserved. </span></p>
+            <!-- Last modified: <span id="last-modified"></span></p> -->
+       
+    </footer>
+
 </body>
 </html>
+<!--  -->
