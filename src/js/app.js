@@ -1,12 +1,6 @@
 /**
- * MAIN APPLICATION FILE - FULLY INTEGRATED WITH APIS + FOOD MODAL
- * 
- * This version uses your actual API modules:
- * - exercisedb.mjs (ExerciseDB via RapidAPI)
- * - usda.mjs (USDA FoodData Central)
- * 
- * NEW: Food search modal integration for beautiful UI
- */
+ * MAIN APPLICATION FILE */
+
 
 // Import your actual API modules
 import { fetchExercises, searchExercises as filterExercises } from './api/exercisedb.mjs';
