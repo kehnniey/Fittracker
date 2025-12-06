@@ -910,3 +910,17 @@ textarea:focus {
         font-size: 1.2rem;
     }
 }
+
+footer {
+   background: linear-gradient(135deg, #2A9D8F 0%, #264653 100%);
+  color: white;
+  text-align: center;   
+    /* padding: 1.5rem 2rem; */
+    /* box-shadow: 0 2px 8px rgba(0,0,0,0.1); */
+    /* position: sticky; */
+    /* top: 0; */
+    /* z-index: 100; */
+}
+
+
+
