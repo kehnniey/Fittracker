@@ -17,7 +17,7 @@ const API_HEADERS = {
     "x-rapidapi-host": "exercisedb.p.rapidapi.com",
 };
 
-/**
+/*.................
  * Normalize exercise data structure
  */
 function normalize(ex) {
