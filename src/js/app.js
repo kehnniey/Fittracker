@@ -21,12 +21,15 @@ import { addMeal, addWorkout, loadWorkouts, loadMeals, getMealsForDate, calculat
 // Import dashboard functions
 import { updateDashboard, displayTodaysMeals, showSuccessMessage, showErrorMessage } from './modules/dashboard.mjs';
 
+
 // ====================
 // GLOBAL STATE
 // ====================
 let exercises = []; // Stores all exercises from API
 let currentSearchResults = []; // Stores current search/filter results
 let foodSearchTimeout; // Debounce timer for food search
+let currentRoutine = { name: '', description: '', exercises: [] }; // for routine builder
+
 
 // ====================
 // INITIALIZATION
@@ -78,6 +81,7 @@ async function loadExercises() {
             </div>
         `;
     }
+    
 }
 
 /**
@@ -309,10 +313,68 @@ function handleAddExercise(event) {
     const exercise = exercises.find(ex => ex.id === exerciseId);
     
     if (!exercise) return;
+
+     // Add to routine
+    currentRoutine.exercises.push({
+        id: exercise.id,
+        name: exercise.name,
+        category: exercise.category,
+        equipment: exercise.equipment,
+        type: exercise.type
+            });
+
     
     // For now, just show success message
     // In Week 6, this will integrate with routine builder
     showSuccessMessage(`Added ${exercise.name} to your routine!`);
+}
+
+// ====================
+// updateRoutine
+// ====================
+
+
+function updateRoutineUI() {
+    const routineList = document.getElementById('routineList'); // make a div in HTML
+    if (!routineList) return;
+
+    if (currentRoutine.exercises.length === 0) {
+        routineList.innerHTML = '<p>No exercises in routine yet.</p>';
+        return;
+    }
+
+    routineList.innerHTML = currentRoutine.exercises.map(ex => `
+        <div class="routine-item" data-id="${ex.id}">
+            ${ex.name} • ${ex.category} • ${ex.equipment}
+            <button class="btn btn-small btn-remove" data-id="${ex.id}">❌</button>
+        </div>
+    `).join('');
+
+    // Add remove buttons
+    routineList.querySelectorAll('.btn-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const idToRemove = parseInt(btn.getAttribute('data-id'));
+            currentRoutine.exercises = currentRoutine.exercises.filter(ex => ex.id !== idToRemove);
+            updateRoutineUI();
+        });
+    });
+}
+
+
+// ====================
+// Save Routine
+// ====================
+
+function saveRoutine() {
+    localStorage.setItem('currentRoutine', JSON.stringify(currentRoutine));
+}
+
+function loadRoutine() {
+    const stored = localStorage.getItem('currentRoutine');
+    if (stored) {
+        currentRoutine = JSON.parse(stored);
+        updateRoutineUI();
+    }
 }
 
 // ====================
@@ -642,6 +704,13 @@ if (chartCanvas) {
 }
 
     
+}
+
+// Ensure renderProgressChart exists before calling
+if (chartCanvas && typeof renderProgressChart === 'function') {
+    chartCanvas.style.display = 'block';
+    if (placeholder) placeholder.style.display = 'none';
+    renderProgressChart();
 }
 
 

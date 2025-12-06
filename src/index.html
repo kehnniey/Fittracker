@@ -50,7 +50,7 @@
             <nav class="nav" aria-label="Main Navigation">
                 <a href="#dashboard" class="nav-link">Dashboard</a>
                 <a href="#exercises" class="nav-link">Exercises</a>
-                <a href="#routines" class="nav-link">Routines</a>
+                <!-- <a href="#routines" class="nav-link">Routines</a> -->
                 <a href="#nutrition" class="nav-link">Nutrition</a>
                 <a href="#progress" class="nav-link">Progress</a>
             </nav>
@@ -181,7 +181,7 @@
         </section>
 
         <!-- MY ROUTINES SECTION -->
-        <section id="routines" class="card" style="margin-top: 2rem;">
+        <!-- <section id="routines" class="card" style="margin-top: 2rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <div>
                     <h2 style="margin-bottom: 0.5rem;">My Routines</h2>
@@ -196,7 +196,7 @@
                     <p>No routines yet. Create your first routine!</p>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- WORKOUT HISTORY SECTION -->
         <section id="history" class="card" style="margin-top: 2rem;">
@@ -371,7 +371,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Test chart file -->
 <script type="module">
-    import { loadTestProgressChart } from "./src/js/test/progressTest.mjs";
+    import { loadTestProgressChart } from "/js/test/progressTest.mjs";
 
     document.addEventListener("DOMContentLoaded", () => {
         loadTestProgressChart();
@@ -379,25 +379,6 @@
 </script>
     <script type="module" src="js/app.js" defer></script>
     <script>
-localStorage.setItem("fit_routines", JSON.stringify([
-    {
-        id: "r1",
-        name: "Full Body Strength",
-        exercises: [
-            { name: "Squats", sets: 4, reps: 10 },
-            { name: "Bench Press", sets: 3, reps: 8 },
-            { name: "Deadlift", sets: 3, reps: 5 }
-        ]
-    },
-    {
-        id: "r2",
-        name: "Cardio Burn",
-        exercises: [
-            { name: "Running", duration: 20 },
-            { name: "Jump Rope", duration: 10 }
-        ]
-    }
-]));
 
 console.log("✔ Fake routines loaded.");
 </script>

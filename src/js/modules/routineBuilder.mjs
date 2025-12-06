@@ -1,50 +1,42 @@
 /**
- * ROUTINE BUILDER MODULE
- * 
- * Manages workout routine creation and management
- * Allows users to create custom workout routines with multiple exercises
+ * routineBuilder.mjs
  */
 
 import { saveRoutines, loadRoutines, deleteRoutine } from './storage.mjs';
 
-// Generate unique IDs for routines/exercises
 const uniqueId = () => Date.now() + Math.floor(Math.random() * 1000);
 
-// Current routine being built
 let currentRoutine = {
     name: '',
     description: '',
     exercises: []
 };
 
-/**
- * Initialize routine builder (reset current routine)
- */
+// -----------------------------
+// INIT
+// -----------------------------
 export function initRoutineBuilder() {
-    currentRoutine = {
-        name: '',
-        description: '',
-        exercises: []
-    };
+    currentRoutine = { name: '', description: '', exercises: [] };
 }
 
-/**
- * Add exercise to current routine
- * 
- * @param {Object} exercise - Exercise object with id, name, category, equipment
- * @param {Object} details - Exercise details (sets, reps, duration, notes)
- * @returns {Object} Added exercise
- */
+// -----------------------------
+// ADD EXERCISE
+// -----------------------------
 export function addExerciseToRoutine(exercise, details = {}) {
+    if (!exercise || !exercise.id) {
+        console.warn("addExerciseToRoutine: invalid exercise", exercise);
+        return null;
+    }
+
     const routineExercise = {
         id: uniqueId(),
         exerciseId: exercise.id,
-        name: exercise.name,
-        category: exercise.category,
-        equipment: exercise.equipment,
-        sets: details.sets || 3,
-        reps: details.reps || 10,
-        duration: details.duration || 0,
+        name: exercise.name || '',
+        category: exercise.category || 'Unknown',
+        equipment: exercise.equipment || 'None',
+        sets: Number(details.sets) || 3,
+        reps: Number(details.reps) || 10,
+        duration: Number(details.duration) || 0,
         notes: details.notes || ''
     };
 
@@ -52,62 +44,49 @@ export function addExerciseToRoutine(exercise, details = {}) {
     return routineExercise;
 }
 
-/**
- * Remove exercise from current routine
- * 
- * @param {number} exerciseId - ID of exercise to remove
- */
+// -----------------------------
+// REMOVE EXERCISE
+// -----------------------------
 export function removeExerciseFromRoutine(exerciseId) {
     currentRoutine.exercises = currentRoutine.exercises.filter(
         ex => ex.id !== exerciseId
     );
 }
 
-/**
- * Update exercise details in routine
- * 
- * @param {number} exerciseId - ID of exercise to update
- * @param {Object} updates - Updated details (sets, reps, duration, notes)
- */
+// -----------------------------
+// UPDATE EXERCISE
+// -----------------------------
 export function updateRoutineExercise(exerciseId, updates) {
-    const exercise = currentRoutine.exercises.find(ex => ex.id === exerciseId);
-    if (!exercise) return;
+    const ex = currentRoutine.exercises.find(e => e.id === exerciseId);
+    if (!ex) return;
 
-    const allowedFields = ['sets', 'reps', 'duration', 'notes'];
-    Object.keys(updates).forEach(key => {
-        if (allowedFields.includes(key)) {
-            exercise[key] = updates[key];
-        }
+    ['sets', 'reps', 'duration', 'notes'].forEach(k => {
+        if (updates[k] !== undefined) ex[k] = updates[k];
     });
 }
 
-/**
- * Get current routine (deep copy)
- * 
- * @returns {Object} Current routine
- */
+// -----------------------------
+// ROUTINE GETTERS / SETTERS
+// -----------------------------
 export function getCurrentRoutine() {
-    return JSON.parse(JSON.stringify(currentRoutine));
+    return JSON.parse(JSON.stringify(currentRoutine)); // deep clone
 }
 
-/**
- * Set routine name and description
- * 
- * @param {string} name - Routine name
- * @param {string} description - Routine description
- */
 export function setRoutineInfo(name, description) {
-    currentRoutine.name = name.trim();
-    currentRoutine.description = description.trim();
+    currentRoutine.name = (name || '').trim();
+    currentRoutine.description = (description || '').trim();
 }
 
-/**
- * Save current routine
- * 
- * @returns {Object|boolean} Saved routine or false if invalid
- */
+// -----------------------------
+// SAVE ROUTINE
+// -----------------------------
 export function saveCurrentRoutine() {
-    if (!currentRoutine.name || currentRoutine.exercises.length === 0) return false;
+    if (!currentRoutine.name || currentRoutine.exercises.length === 0) {
+        console.warn("saveCurrentRoutine failed: missing name or exercises");
+        return false;
+    }
+
+    const routines = loadRoutines();
 
     const routine = {
         id: uniqueId(),
@@ -117,26 +96,24 @@ export function saveCurrentRoutine() {
         createdAt: new Date().toISOString()
     };
 
-    const routines = loadRoutines();
     routines.push(routine);
     saveRoutines(routines);
 
-    initRoutineBuilder(); // Reset after saving
-
+    initRoutineBuilder();
     return routine;
 }
 
-/**
- * Load a saved routine for editing
- * 
- * @param {number} routineId - ID of routine to load
- * @returns {Object|null} Loaded routine or null
- */
+// -----------------------------
+// LOAD FOR EDITING
+// -----------------------------
 export function loadRoutineForEditing(routineId) {
     const routines = loadRoutines();
     const routine = routines.find(r => r.id === routineId);
 
-    if (!routine) return null;
+    if (!routine) {
+        console.warn("loadRoutineForEditing: routine not found", routineId);
+        return null;
+    }
 
     currentRoutine = {
         id: routine.id,
@@ -148,90 +125,80 @@ export function loadRoutineForEditing(routineId) {
     return getCurrentRoutine();
 }
 
-/**
- * Delete a saved routine
- * 
- * @param {number} routineId - ID of routine to delete
- * @returns {boolean} Success status
- */
+// -----------------------------
+// DELETE
+// -----------------------------
 export function removeRoutine(routineId) {
     return deleteRoutine(routineId);
 }
 
-/**
- * Get all saved routines
- * 
- * @returns {Array} Array of routines
- */
+// -----------------------------
+// GET ALL ROUTINES
+// -----------------------------
 export function getAllRoutines() {
     return loadRoutines();
 }
 
-/**
- * Reorder exercises in current routine
- * 
- * @param {number} fromIndex - Current index
- * @param {number} toIndex - Target index
- */
+// -----------------------------
+// REORDER
+// -----------------------------
 export function reorderExercises(fromIndex, toIndex) {
-    const exercises = currentRoutine.exercises;
+    const arr = currentRoutine.exercises;
+
     if (
-        fromIndex < 0 || fromIndex >= exercises.length ||
-        toIndex < 0 || toIndex >= exercises.length
+        fromIndex < 0 || fromIndex >= arr.length ||
+        toIndex < 0 || toIndex > arr.length
     ) return;
 
-    const [movedExercise] = exercises.splice(fromIndex, 1);
-    exercises.splice(toIndex, 0, movedExercise);
+    const [item] = arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, item);
 }
 
-/**
- * Duplicate an exercise in the routine
- * 
- * @param {number} exerciseId - ID of exercise to duplicate
- * @returns {Object|null} Duplicate exercise
- */
+// -----------------------------
+// DUPLICATE
+// -----------------------------
 export function duplicateExercise(exerciseId) {
-    const exercise = currentRoutine.exercises.find(ex => ex.id === exerciseId);
-    if (!exercise) return null;
+    const ex = currentRoutine.exercises.find(e => e.id === exerciseId);
+    if (!ex) return null;
 
-    const duplicate = { ...exercise, id: uniqueId() };
-    currentRoutine.exercises.push(duplicate);
-    return duplicate;
+    const dup = { ...ex, id: uniqueId() };
+    currentRoutine.exercises.push(dup);
+
+    return dup;
 }
 
-/**
- * Clear exercises from current routine (keep name/description)
- */
+// -----------------------------
+// CLEAR
+// -----------------------------
 export function clearExercises() {
     currentRoutine.exercises = [];
 }
 
-/**
- * Get routine summary statistics
- * 
- * @param {Object} routine - Routine object
- * @returns {Object} Summary stats
- */
+// -----------------------------
+// SUMMARY
+// -----------------------------
 export function getRoutineSummary(routine) {
     const totalExercises = routine.exercises.length;
-    const totalSets = routine.exercises.reduce((sum, ex) => sum + (ex.sets || 0), 0);
-    const totalReps = routine.exercises.reduce((sum, ex) => sum + ((ex.reps || 0) * (ex.sets || 0)), 0);
+    const totalSets = routine.exercises.reduce(
+        (s, e) => s + (e.sets || 0),
+        0
+    );
+    const totalReps = routine.exercises.reduce(
+        (s, e) => s + ((e.reps || 0) * (e.sets || 0)),
+        0
+    );
 
-    const estimatedDuration = routine.exercises.reduce((sum, ex) => {
-        const setTime = (ex.sets || 3) * 2.5; // 2-3 mins per set
-        return sum + setTime + (ex.duration || 0);
-    }, 0);
+    const estimatedDuration = Math.round(
+        routine.exercises.reduce(
+            (s, e) => s + ((e.sets || 3) * 2.5) + (e.duration || 0),
+            0
+        )
+    );
 
     const categories = {};
     routine.exercises.forEach(ex => {
         categories[ex.category] = (categories[ex.category] || 0) + 1;
     });
 
-    return {
-        totalExercises,
-        totalSets,
-        totalReps,
-        estimatedDuration: Math.round(estimatedDuration),
-        categories
-    };
+    return { totalExercises, totalSets, totalReps, estimatedDuration, categories };
 }
