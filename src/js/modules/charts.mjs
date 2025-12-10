@@ -1,5 +1,4 @@
 /**
- * CHARTS MODULE
  * Handles all Chart.js visualizations*/
 
 import { loadWorkouts, loadMeals } from './storage.mjs';

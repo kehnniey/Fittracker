@@ -2,10 +2,7 @@
 // HAMBURGER MENU TOGGLE
 // ==========================================
 
-/**
- * Initialize hamburger menu functionality
- * Call this function when DOM is ready
- */
+
 export function initHamburgerMenu() {
     const menu = document.getElementById('menu');
     const navList = document.getElementById('nav-list');

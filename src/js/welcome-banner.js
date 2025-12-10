@@ -2,10 +2,7 @@
 // WELCOME BANNER - First-time users only
 // ==========================================
 
-/**
- * Initialize welcome banner functionality
- * Call this function when DOM is ready
- */
+
 export function initWelcomeBanner() {
     // Check if first visit
     const hasVisited = localStorage.getItem('fittrack-visited');
@@ -75,7 +72,3 @@ function showQuickTour() {
     // Dismiss banner after tour
     dismissWelcomeBanner();
 }
-
-// paste into the pag console:
-// localStorage.removeItem('fittrack-visited');
-// location.reload();
