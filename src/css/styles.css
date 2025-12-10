@@ -58,10 +58,13 @@ body {
     font-weight: 700;
 }
 
-/* Navigation Links */
+/* ===================
+   NAVIGATION
+   =================== */
 .nav {
     display: flex;
     gap: 2rem;
+    list-style: none;
 }
 
 .nav a {
@@ -92,6 +95,61 @@ body {
 }
 
 /* ===================
+   HAMBURGER MENU
+   =================== */
+#menu {
+    display: none;
+    width: 30px;
+    height: 24px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+#menu::before,
+#menu::after,
+#menu span {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    left: 0;
+}
+
+#menu::before {
+    top: 0;
+}
+
+#menu span {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#menu::after {
+    bottom: 0;
+}
+
+/* Hamburger Active State (X icon) */
+#menu.active::before {
+    transform: rotate(45deg);
+    top: 50%;
+    margin-top: -1.5px;
+}
+
+#menu.active span {
+    opacity: 0;
+}
+
+#menu.active::after {
+    transform: rotate(-45deg);
+    bottom: 50%;
+    margin-bottom: -1.5px;
+}
+
+/* ===================
    CONTAINER & LAYOUT
    =================== */
 .container {
@@ -100,7 +158,6 @@ body {
     padding: 0 2rem;
 }
 
-/* Dashboard Grid - 3 columns on desktop */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -156,7 +213,6 @@ body {
 /* ===================
    NUTRITION CARD
    =================== */
-/* Calorie Display Circle */
 .calorie-display {
     text-align: center;
     padding: 2rem;
@@ -176,7 +232,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* Progress Bar */
 .progress-bar {
     height: 12px;
     background: #e0e0e0;
@@ -218,7 +273,6 @@ body {
     transform: translateY(0);
 }
 
-/* Button Variants */
 .btn-secondary {
     background: #F4A261;
 }
@@ -236,15 +290,29 @@ body {
     font-size: 0.9rem;
 }
 
-/* Button Group - side by side buttons */
 .btn-group {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
 }
 
+.btn-icon {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.btn-icon:hover {
+    background: #e0e0e0;
+    color: #264653;
+}
+
 /* ===================
-   SEARCH SECTION
+   SEARCH & FORMS
    =================== */
 .search-container {
     margin-bottom: 2rem;
@@ -266,15 +334,49 @@ body {
     box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
 }
 
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #264653;
+}
+
+.form-group input,
+.form-group select,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #2A9D8F;
+    box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+}
+
+textarea {
+    resize: vertical;
+}
+
 /* ===================
-   EXERCISE LIST
+   EXERCISE LIBRARY
    =================== */
 .exercise-list {
     max-height: 400px;
     overflow-y: auto;
 }
 
-/* Individual Exercise Item */
 .exercise-item {
     background: #f8f9fa;
     padding: 1rem;
@@ -331,32 +433,37 @@ body {
 }
 
 /* ===================
-   MEAL LOG
+   STATS SECTION
    =================== */
-.meal-entry {
-    background: #f8f9fa;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #2A9D8F15 0%, #26465315 100%);
+    padding: 1.5rem;
     border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-left: 3px solid #2A9D8F;
+    text-align: center;
 }
 
-.meal-name {
-    font-weight: 600;
-    color: #264653;
-}
-
-.meal-calories {
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
     color: #2A9D8F;
-    font-weight: 600;
-    font-size: 1.1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
 }
 
 /* ===================
-   MODAL / POP-UP
+   MODAL / POPUP
    =================== */
 .modal {
     display: none;
@@ -419,7 +526,8 @@ body {
     margin: 0;
 }
 
-.close-btn {
+.close-btn,
+.modal-close {
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -434,7 +542,8 @@ body {
     border-radius: 50%;
 }
 
-.close-btn:hover {
+.close-btn:hover,
+.modal-close:hover {
     color: #264653;
     background: #f0f0f0;
 }
@@ -448,69 +557,7 @@ body {
 }
 
 /* ===================
-   FORMS
-   =================== */
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #264653;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: 'Inter', sans-serif;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #2A9D8F;
-    box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
-}
-
-/* ===================
-   STATS SECTION
-   =================== */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.stat-card {
-    background: linear-gradient(135deg, #2A9D8F15 0%, #26465315 100%);
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2A9D8F;
-    font-family: 'Poppins', sans-serif;
-}
-
-.stat-label {
-    color: #666;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-}
-
-/* ===================
-   FOOD SEARCH RESULTS
+   FOOD SEARCH
    =================== */
 .food-result {
     background: #f8f9fa;
@@ -526,211 +573,106 @@ body {
     transform: translateX(5px);
 }
 
-/* ===================
-   UTILITY CLASSES
-   =================== */
-/* Loading State */
-.loading {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
-}
-
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: #666;
-}
-
-.empty-state-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-/* API Notice */
-.api-notice {
-    background: #e3f2fd;
-    border-left: 4px solid #2196f3;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 4px;
-    font-size: 0.9rem;
-}
-
-.api-notice strong {
-    color: #1976d2;
-}
-
-/* ===================
-   TOAST NOTIFICATIONS
-   =================== */
-.toast {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+.food-result-item {
     background: white;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 2000;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: all 0.3s ease;
-    max-width: 400px;
-}
-
-.toast.show {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.toast-success {
-    border-left: 4px solid #2A9D8F;
-    color: #264653;
-}
-
-.toast-error {
-    border-left: 4px solid #E76F51;
-    color: #c62828;
-}
-
-/* ===================
-   EXERCISE DETAIL MODAL
-   =================== */
-.exercise-detail-content {
-    margin-top: 1.5rem;
-}
-
-.detail-section {
-    margin-bottom: 2rem;
-}
-
-.detail-section h3 {
-    font-family: 'Poppins', sans-serif;
-    color: #264653;
-    font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-}
-
-.detail-badge {
-    display: inline-block;
-    background: #2A9D8F;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-weight: 600;
-}
-
-.detail-text {
-    color: #666;
-    line-height: 1.8;
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 6px;
-}
-
-.detail-steps {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 6px;
-}
-
-.detail-steps ol {
-    margin-left: 1.5rem;
-}
-
-.detail-steps li {
-    margin-bottom: 0.75rem;
-    color: #555;
-    line-height: 1.6;
-}
-
-/* ===================
-   ROUTINE BUILDER
-   =================== */
-.routine-exercises {
-    margin: 2rem 0;
-}
-
-.routine-exercises h3 {
-    font-family: 'Poppins', sans-serif;
-    color: #264653;
+    padding: 1.25rem;
     margin-bottom: 1rem;
-}
-
-.routine-list {
-    border: 2px dashed #2A9D8F;
     border-radius: 8px;
-    padding: 1.5rem;
-    min-height: 200px;
+    border: 2px solid #E0E0E0;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.routine-exercise-item {
+.food-result-item:hover {
+    border-color: #2A9D8F;
+    box-shadow: 0 4px 12px rgba(42, 157, 143, 0.15);
+    transform: translateY(-2px);
+}
+
+.food-result-item.selected {
+    border-color: #2A9D8F;
+    background: #f0fdf4;
+}
+
+.food-item-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #264653;
+    margin-bottom: 0.5rem;
+}
+
+.food-item-nutrition {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+
+.nutrition-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.nutrition-badge.calories {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.nutrition-badge.protein {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.nutrition-badge.carbs {
+    background: #f3e5f5;
+    color: #6a1b9a;
+}
+
+.nutrition-badge.fat {
+    background: #fce4ec;
+    color: #c2185b;
+}
+
+.food-item-brand {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* ===================
+   MEALS
+   =================== */
+.meal-entry {
     background: #f8f9fa;
     padding: 1rem;
     margin-bottom: 0.75rem;
-    border-radius: 6px;
+    border-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-left: 3px solid #2A9D8F;
 }
 
-.routine-exercise-info {
-    flex: 1;
-}
-
-.routine-exercise-name {
+.meal-name {
     font-weight: 600;
     color: #264653;
-    margin-bottom: 0.25rem;
 }
 
-.routine-exercise-details {
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.routine-exercise-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.btn-icon {
-    background: none;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.3s;
-}
-
-.btn-icon:hover {
-    background: #e0e0e0;
-    color: #264653;
-}
-
-textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: 'Inter', sans-serif;
-    resize: vertical;
-    transition: border-color 0.3s ease;
-}
-
-textarea:focus {
-    outline: none;
-    border-color: #2A9D8F;
-    box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+.meal-calories {
+    color: #2A9D8F;
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
 /* ===================
-   ROUTINES SECTION
+   ROUTINES
    =================== */
 .routines-grid {
     display: grid;
@@ -816,6 +758,54 @@ textarea:focus {
     color: white;
 }
 
+.routine-exercises {
+    margin: 2rem 0;
+}
+
+.routine-exercises h3 {
+    font-family: 'Poppins', sans-serif;
+    color: #264653;
+    margin-bottom: 1rem;
+}
+
+.routine-list {
+    border: 2px dashed #2A9D8F;
+    border-radius: 8px;
+    padding: 1.5rem;
+    min-height: 200px;
+}
+
+.routine-exercise-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 3px solid #2A9D8F;
+}
+
+.routine-exercise-info {
+    flex: 1;
+}
+
+.routine-exercise-name {
+    font-weight: 600;
+    color: #264653;
+    margin-bottom: 0.25rem;
+}
+
+.routine-exercise-details {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.routine-exercise-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
 /* ===================
    WORKOUT HISTORY
    =================== */
@@ -864,25 +854,423 @@ textarea:focus {
 }
 
 /* ===================
+   EXERCISE DETAILS
+   =================== */
+.exercise-detail-content {
+    margin-top: 1.5rem;
+}
+
+.detail-section {
+    margin-bottom: 2rem;
+}
+
+.detail-section h3 {
+    font-family: 'Poppins', sans-serif;
+    color: #264653;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+.detail-badge {
+    display: inline-block;
+    background: #2A9D8F;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.detail-text {
+    color: #666;
+    line-height: 1.8;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+.detail-steps {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 6px;
+}
+
+.detail-steps ol {
+    margin-left: 1.5rem;
+}
+
+.detail-steps li {
+    margin-bottom: 0.75rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* ===================
+   UTILITY CLASSES
+   =================== */
+.section-description {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.api-notice {
+    background: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.api-notice strong {
+    color: #1976d2;
+}
+
+/* ===================
+   CHART STYLES
+   =================== */
+.chart-container {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    color: #666;
+    border: 2px dashed #2A9D8F;
+    margin-bottom: 2rem;
+}
+
+.chart-placeholder {
+    display: block;
+}
+
+.chart-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.chart-title {
+    margin: 0;
+}
+
+.chart-subtitle {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.chart-canvas {
+    display: none;
+    width: 100%;
+    height: 200px;
+}
+
+/* ===================
+   FOOD MODAL SPECIFIC
+   =================== */
+.modal-title {
+    margin-bottom: 1.5rem;
+    color: #2A9D8F;
+}
+
+.food-search-section {
+    margin-bottom: 2rem;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.search-input-group .search-input {
+    flex: 1;
+}
+
+.btn-search {
+    padding: 1rem 2rem;
+    white-space: nowrap;
+}
+
+.api-credit {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+}
+
+.food-loading {
+    display: none;
+    text-align: center;
+    padding: 3rem;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2A9D8F;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+}
+
+.food-results {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.selected-food-section {
+    display: none;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #2A9D8F;
+}
+
+.selected-food-title {
+    margin-bottom: 1rem;
+    color: #264653;
+}
+
+.meal-type-section {
+    margin-top: 1.5rem;
+}
+
+.meal-type-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #264653;
+}
+
+.meal-type-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-primary {
+    background: #2A9D8F;
+}
+
+.btn-primary:hover {
+    background: #264653;
+}
+
+/* ===================
+   TOAST NOTIFICATIONS
+   =================== */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 2000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 400px;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast-success {
+    border-left: 4px solid #2A9D8F;
+    color: #264653;
+}
+
+.toast-error {
+    border-left: 4px solid #E76F51;
+    color: #c62828;
+}
+
+/* ===================
+   FOOTER
+   =================== */
+footer {
+    background: linear-gradient(135deg, #2A9D8F 0%, #264653 100%);
+    color: white;
+    text-align: center;
+    padding: 1.5rem 2rem;
+}
+
+/* ===================
+   ANIMATIONS
+   =================== */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===================
+   HAMBURGER MENU
+   =================== */
+#menu {
+    display: none;
+    width: 30px;
+    height: 24px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+#menu::before,
+#menu::after,
+#menu span {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    left: 0;
+}
+
+#menu::before {
+    top: 0;
+}
+
+#menu span {
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+}
+
+#menu::after {
+    bottom: 0;
+}
+
+/* Hamburger X animation when active */
+#menu.active::before {
+    transform: rotate(45deg);
+    top: 50%;
+    margin-top: -1.5px;
+}
+
+#menu.active span {
+    opacity: 0;
+}
+
+#menu.active::after {
+    transform: rotate(-45deg);
+    bottom: 50%;
+    margin-bottom: -1.5px;
+}
+
+/* ===================
    RESPONSIVE DESIGN
    =================== */
 @media (max-width: 768px) {
-    /* Hide navigation on mobile */
+    /* Hamburger Menu */
+    #menu {
+        display: block;
+    }
+
+    /* Mobile Navigation */
     .nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        max-width: 300px;
+        height: 100vh;
+        background: #2A6A72;
+        flex-direction: column;
+        padding: 80px 2rem 2rem 2rem;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        gap: 1rem;
+        list-style: none;
+        margin: 0;
+    }
+
+    .nav.active {
+        right: 0;
+    }
+
+    .nav li {
+        width: 100%;
+    }
+
+    .nav a {
+        display: block;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-size: 1.1rem;
+        width: 100%;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .nav a:hover {
+        background: rgba(255,255,255,0.15);
+        border-radius: 8px;
+    }
+
+    .nav a:active {
+        background: rgba(255,255,255,0.25);
+    }
+
+    .nav a::after {
         display: none;
     }
 
-    /* Stack dashboard cards */
+    /* Navigation Overlay */
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0,0,0,0.6);
+        z-index: 999;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-overlay.active {
+        display: block;
+    }
+
+    .header-content {
+        justify-content: space-between;
+    }
+
+    /* Layout Adjustments */
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
 
-    /* Stack buttons vertically */
     .btn-group {
         flex-direction: column;
     }
 
-    /* Reduce padding on mobile */
     .container {
         padding: 0 1rem;
     }
@@ -891,7 +1279,7 @@ textarea:focus {
         padding: 1.5rem;
     }
 
-    /* Smaller text on mobile */
+    /* Text Size Adjustments */
     .calorie-number {
         font-size: 2rem;
     }
@@ -911,231 +1299,96 @@ textarea:focus {
     }
 }
 
-footer {
-   background: linear-gradient(135deg, #2A9D8F 0%, #264653 100%);
-  color: white;
-  text-align: center;   
-    /* padding: 1.5rem 2rem; */
-    /* box-shadow: 0 2px 8px rgba(0,0,0,0.1); */
-    /* position: sticky; */
-    /* top: 0; */
-    /* z-index: 100; */
+.chart-container {
+    padding: 2rem;
+    transition: all 0.3s ease;  /* NEW! */
 }
-/* 
- <!-- Hamburger Menu & Food Modal Styles --> */
-  
-        /* ==========================================
-           HAMBURGER MENU STYLES
-           ========================================== */
-        
-        /* Hamburger icon (#menu div) */
-        #menu {
-            display: none;
-            width: 30px;
-            height: 24px;
-            position: relative;
-            cursor: pointer;
-            z-index: 1001;
-        }
 
-        #menu::before,
-        #menu::after,
-        #menu span {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 3px;
-            background-color: #ffffff;  /* White lines on teal header */
-            border-radius: 3px;
-            transition: all 0.3s ease;
-            left: 0;
-        }
+.chart-icon {
+    font-size: 3rem;
+    transition: font-size 0.3s ease;  /* NEW! */
+}
 
-        #menu::before {
-            top: 0;
-        }
+.chart-canvas {
+    height: 300px;  /* INCREASED from 200px */
+    transition: height 0.3s ease;  /* NEW! */
+}
 
-        #menu span {
-            display: block;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+@media (max-width: 768px) {
+    .chart-container { padding: 1rem; }  /* NEW! */
+    .chart-icon { font-size: 2rem; }     /* NEW! */
+    .chart-canvas { height: 200px; }     /* NEW! */
+    .stats-grid { grid-template-columns: 1fr; }  /* NEW! */
+}
 
-        #menu::after {
-            bottom: 0;
-        }
+@media (max-width: 480px) {
+    .chart-container { padding: 0.75rem; }  /* NEW! */
+    .chart-icon { font-size: 1.5rem; }      /* NEW! */
+}
 
-        /* Hamburger animation when menu is open */
-        #menu.active::before {
-            transform: rotate(45deg);
-            top: 50%;
-            margin-top: -1.5px;
-        }
 
-        #menu.active span {
-            opacity: 0;
-        }
+.welcome-banner {
+    background: linear-gradient(135deg, #2A9D8F15 0%, #26465315 100%);
+    border-left: 4px solid #2A9D8F;
+    padding: 1.5rem 2rem;
+    margin: 2rem auto;
+    max-width: 1200px;
+    border-radius: 8px;
+    animation: slideDown 0.5s ease;
+}
 
-        #menu.active::after {
-            transform: rotate(-45deg);
-            bottom: 50%;
-            margin-bottom: -1.5px;
-        }
+.welcome-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
 
-        /* Mobile Navigation Styles */
-        @media (max-width: 768px) {
-            #menu {
-                display: block;
-            }
+.welcome-text h2 {
+    color: #2A9D8F;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
 
-            .nav {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 70%;
-                max-width: 300px;
-                height: 100vh;
-                background: #2A6A72;  /* Teal background matching header */
-                flex-direction: column;
-                padding: 80px 2rem 2rem 2rem;
-                box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-                transition: right 0.3s ease;
-                z-index: 1000;
-                gap: 1rem;
-                list-style: none;
-                margin: 0;
-            }
+.welcome-text p {
+    color: #666;
+    margin: 0;
+}
 
-            .nav.active {
-                right: 0;
-            }
+.welcome-actions {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0;
+}
 
-            .nav li {
-                width: 100%;
-            }
+@keyframes slideDown {
+    from { 
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-            .nav a {
-                display: block;
-                padding: 1rem;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);  /* Subtle white border */
-                font-size: 1.1rem;
-                width: 100%;
-                color: #ffffff;  /* White text */
-                text-decoration: none;
-            }
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .welcome-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .welcome-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .welcome-actions .btn {
+        width: 100%;
+    }
+}
 
-            .nav a:hover {
-                background: rgba(255, 255, 255, 0.15);  /* Light white overlay on hover */
-                border-radius: 8px;
-            }
-
-            .nav a:active {
-                background: rgba(255, 255, 255, 0.25);  /* Stronger highlight when clicked */
-            }
-
-            /* Overlay when menu is open */
-            .nav-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                background: rgba(0, 0, 0, 0.6);  /* Darker overlay */
-                z-index: 999;
-                transition: opacity 0.3s ease;
-            }
-
-            .nav-overlay.active {
-                display: block;
-            }
-
-            /* Adjust header for mobile */
-            .header-content {
-                justify-content: space-between;
-            }
-        }
-
-        /* ==========================================
-           FOOD MODAL STYLES
-           ========================================== */
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .food-result-item {
-            background: white;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-            border: 2px solid #E0E0E0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .food-result-item:hover {
-            border-color: #2A9D8F;
-            box-shadow: 0 4px 12px rgba(42, 157, 143, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .food-result-item.selected {
-            border-color: #2A9D8F;
-            background: #f0fdf4;
-        }
-
-        .food-item-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #264653;
-            margin-bottom: 0.5rem;
-        }
-
-        .food-item-nutrition {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-top: 0.75rem;
-        }
-
-        .nutrition-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #f8f9fa;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .nutrition-badge.calories {
-            background: #fff3e0;
-            color: #e65100;
-        }
-
-        .nutrition-badge.protein {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-
-        .nutrition-badge.carbs {
-            background: #f3e5f5;
-            color: #6a1b9a;
-        }
-
-        .nutrition-badge.fat {
-            background: #fce4ec;
-            color: #c2185b;
-        }
-
-        .food-item-brand {
-            font-size: 0.85rem;
-            color: #999;
-            margin-top: 0.5rem;
-            font-style: italic;
-        }
-  
-
+.welcome-banner {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}

@@ -1077,81 +1077,29 @@ window.fittracker = {
 console.log('🎯 FitTrack loaded! Access debug tools via: window.fittracker');
 
 
-//  Hamburger Menu Script
+/// ==========================================
+// MAIN INITIALIZATION
+// Import and initialize all modules
+// ==========================================
 
-   
-       
+import { initWelcomeBanner } from './welcome-banner.js';
+import { initHamburgerMenu } from './hamburger-menu.js';
 
-            // Hamburger Menu Toggle
-document.addEventListener('DOMContentLoaded', () => {
-    const menuButton = document.querySelector("menu");
-    const navList = document.querySelector("nav-list");
-
-    if (menuButton && navList) {
-        menuButton.addEventListener("click", () => {
-            navList.classList.toggle("open");
-            menuButton.classList.toggle("open");
-        });
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 FitTracker Initializing...');
+    
+    // Set current year in footer
+    const yearElement = document.getElementById('current-year');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
     }
+    
+    // Initialize welcome banner
+    initWelcomeBanner();
+    
+    // Initialize hamburger menu
+    initHamburgerMenu();
+    
+    console.log('✅ FitTracker Ready!');
 });
-        //    Hamburger Menu Work in Progress
-
-        // Hamburger Menu Toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const menu = document.getElementById('menu');
-            const navList = document.getElementById('nav-list');
-            const navOverlay = document.getElementById('navOverlay');
-            const navLinks = document.querySelectorAll('.nav a');
-
-            // Create the middle line span for the hamburger
-            const middleLine = document.createElement('span');
-            menu.appendChild(middleLine);
-
-            // Toggle menu
-            function toggleMenu() {
-                menu.classList.toggle('active');
-                navList.classList.toggle('active');
-                navOverlay.classList.toggle('active');
-                
-                // Prevent body scroll when menu is open
-                if (navList.classList.contains('active')) {
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.body.style.overflow = '';
-                }
-            }
-
-            // Close menu
-            function closeMenu() {
-                menu.classList.remove('active');
-                navList.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            // Event listeners
-            menu.addEventListener('click', toggleMenu);
-            navOverlay.addEventListener('click', closeMenu);
-
-            // Close menu when clicking nav links
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    closeMenu();
-                    
-                    // Smooth scroll to section
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetSection = document.getElementById(targetId);
-                    if (targetSection) {
-                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            });
-
-            // Close menu on Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && navList.classList.contains('active')) {
-                    closeMenu();
-                }
-            });
-        });
